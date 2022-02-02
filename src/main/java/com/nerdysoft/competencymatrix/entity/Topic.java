@@ -7,9 +7,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +30,7 @@ public class Topic {
     @NotEmpty(message = "Description must be filled")
     @Size(min = 5, max = 50, message = "Size of Description must be between 5 and 50")
     private String description;
+
 
     @NotNull(message = "required must be filled")
     private boolean required;

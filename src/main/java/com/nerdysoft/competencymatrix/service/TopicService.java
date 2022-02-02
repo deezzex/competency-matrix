@@ -116,4 +116,13 @@ public class TopicService {
         }else
             return new Topic();
     }
+
+    public int countRequiredTopics() {
+        return repository.countRequiredTopics();
+    }
+
+    public int countAllTopics() {
+        return repository.countAllTopics();
+    }
+
 }

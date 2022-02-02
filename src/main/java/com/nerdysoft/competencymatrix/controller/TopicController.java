@@ -1,9 +1,6 @@
 package com.nerdysoft.competencymatrix.controller;
 
-import com.nerdysoft.competencymatrix.entity.Item;
 import com.nerdysoft.competencymatrix.entity.Topic;
-import com.nerdysoft.competencymatrix.entity.dto.ItemDto;
-import com.nerdysoft.competencymatrix.entity.dto.ResourceDto;
 import com.nerdysoft.competencymatrix.entity.dto.TopicDto;
 import com.nerdysoft.competencymatrix.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
