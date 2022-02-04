@@ -77,14 +77,14 @@ public class CompetencyController {
     }
 
     @PostMapping("/{competencyId}/add/{categoryId}")
-    public ResponseEntity<CompetencyDto> addTopicToCompetency(@PathVariable Long competencyId, @PathVariable Long categoryId){
+    public ResponseEntity<CompetencyDto> addCategoryToCompetency(@PathVariable Long competencyId, @PathVariable Long categoryId){
         Competency competency = competencyService.addCategoryToCompetency(competencyId, categoryId);
 
         return new ResponseEntity<>(CompetencyDto.from(competency), OK);
     }
 
     @DeleteMapping("/{competencyId}/delete/{categoryId}")
-    public ResponseEntity<CompetencyDto> deleteTopicFromCompetency(@PathVariable Long competencyId, @PathVariable Long categoryId){
+    public ResponseEntity<CompetencyDto> deleteCategoryFromCompetency(@PathVariable Long competencyId, @PathVariable Long categoryId){
         Competency category = competencyService.removeCategoryFromCompetency(competencyId, categoryId);
 
         return new ResponseEntity<>(CompetencyDto.from(category), OK);

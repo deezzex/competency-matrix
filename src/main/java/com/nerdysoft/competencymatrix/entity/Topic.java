@@ -63,6 +63,16 @@ public class Topic {
         return topic;
     }
 
+    public Topic(Long id, String name, String description, boolean required, Priority priority, List<Item> items, List<Resource> resources) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.required = required;
+        this.priority = priority;
+        this.items = items;
+        this.resources = resources;
+    }
+
     public void addResource(Resource resource){
         resources.add(resource);
     }

@@ -48,7 +48,15 @@ public class ResourceService {
 
     }
 
-    public void deleteResource(Long id){
-        repository.deleteById(id);
+    public boolean deleteResource(Long id){
+        Optional<Resource> byId = repository.findById(id);
+
+        if (byId.isPresent()){
+            Resource resource = byId.get();
+            repository.delete(resource);
+        }
+        Optional<Resource> removed = repository.findById(id);
+
+        return removed.isEmpty();
     }
 }

@@ -51,8 +51,16 @@ public class CompetencyService {
             return new Competency();
     }
 
-    public void deleteCompetency(Long id){
-        repository.deleteById(id);
+    public boolean deleteCompetency(Long id){
+        Optional<Competency> byId = repository.findById(id);
+
+        if (byId.isPresent()){
+            Competency competency = byId.get();
+            repository.delete(competency);
+        }
+        Optional<Competency> removed = repository.findById(id);
+
+        return removed.isEmpty();
     }
 
     @Transactional

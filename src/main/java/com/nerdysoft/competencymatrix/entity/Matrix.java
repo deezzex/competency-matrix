@@ -52,7 +52,7 @@ public class Matrix {
 
     public void addCompetency(Competency competency){competencies.add(competency);}
 
-    public void removeCompetency(Competency competency){competencies.add(competency);}
+    public void removeCompetency(Competency competency){competencies.remove(competency);}
 
     public void addLevel(Level level){
         levels.add(level);

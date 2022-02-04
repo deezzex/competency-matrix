@@ -1,19 +1,11 @@
 package com.nerdysoft.competencymatrix.controller;
 
-import com.nerdysoft.competencymatrix.entity.Level;
-import com.nerdysoft.competencymatrix.entity.Matrix;
-import com.nerdysoft.competencymatrix.entity.Topic;
 import com.nerdysoft.competencymatrix.entity.User;
-import com.nerdysoft.competencymatrix.entity.dto.LevelDto;
-import com.nerdysoft.competencymatrix.entity.dto.MatrixDto;
-import com.nerdysoft.competencymatrix.entity.dto.TopicDto;
 import com.nerdysoft.competencymatrix.entity.dto.UserDto;
 import com.nerdysoft.competencymatrix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 import java.util.Optional;
 

@@ -53,8 +53,16 @@ public class TopicService {
             return new Topic();
     }
 
-    public void deleteTopic(Long id){
-        repository.deleteById(id);
+    public boolean deleteTopic(Long id){
+        Optional<Topic> byId = repository.findById(id);
+
+        if (byId.isPresent()){
+            Topic topic = byId.get();
+            repository.delete(topic);
+        }
+        Optional<Topic> removed = repository.findById(id);
+
+        return removed.isEmpty();
     }
 
     @Transactional

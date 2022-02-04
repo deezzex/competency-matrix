@@ -34,6 +34,12 @@ public class Item {
     @ToString.Exclude
     private List<Resource> resources = new ArrayList<>();
 
+    public Item(Long id, String label, List<Resource> resources) {
+        this.id = id;
+        this.label = label;
+        this.resources = resources;
+    }
+
     public static Item from(ItemDto itemDto) {
         Item item = new Item();
 

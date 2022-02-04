@@ -48,8 +48,16 @@ public class ItemService {
             return new Item();
     }
 
-    public void deleteItem(Long id){
-        repository.deleteById(id);
+    public boolean deleteItem(Long id){
+        Optional<Item> byId = repository.findById(id);
+
+        if (byId.isPresent()){
+            Item item = byId.get();
+            repository.delete(item);
+        }
+        Optional<Item> removed = repository.findById(id);
+
+        return removed.isEmpty();
     }
 
     @Transactional

@@ -51,8 +51,16 @@ public class CategoryService {
             return new Category();
     }
 
-    public void deleteCategory(Long id){
-        repository.deleteById(id);
+    public boolean deleteCategory(Long id){
+        Optional<Category> byId = repository.findById(id);
+
+        if (byId.isPresent()){
+            Category category = byId.get();
+            repository.delete(category);
+        }
+        Optional<Category> removed = repository.findById(id);
+
+        return removed.isEmpty();
     }
 
     @Transactional

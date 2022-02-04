@@ -50,8 +50,16 @@ public class MatrixService {
             return new Matrix();
     }
 
-    public void deleteMatrix(Long id){
-        repository.deleteById(id);
+    public boolean deleteMatrix(Long id){
+        Optional<Matrix> byId = repository.findById(id);
+
+        if (byId.isPresent()){
+            Matrix matrix = byId.get();
+            repository.delete(matrix);
+        }
+        Optional<Matrix> removed = repository.findById(id);
+
+        return removed.isEmpty();
     }
 
     @Transactional

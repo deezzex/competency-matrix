@@ -54,6 +54,13 @@ public class TopicProgress {
         return topicProgress;
     }
 
+    public TopicProgress(Long id, String comment, Integer mark, boolean finished) {
+        this.id = id;
+        this.comment = comment;
+        this.mark = mark;
+        this.finished = finished;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

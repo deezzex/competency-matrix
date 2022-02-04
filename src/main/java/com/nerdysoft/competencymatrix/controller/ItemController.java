@@ -77,14 +77,14 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/add/{resourceId}")
-    public ResponseEntity<ItemDto> addCriteriaToGoal(@PathVariable Long itemId, @PathVariable Long resourceId){
+    public ResponseEntity<ItemDto> addResourceToItem(@PathVariable Long itemId, @PathVariable Long resourceId){
         Item item = itemService.addResourceToItem(itemId, resourceId);
 
         return new ResponseEntity<>(ItemDto.from(item), OK);
     }
 
     @DeleteMapping("/{itemId}/delete/{resourceId}")
-    public ResponseEntity<ItemDto> deleteCriteriaFromGoal(@PathVariable Long itemId, @PathVariable Long resourceId){
+    public ResponseEntity<ItemDto> removeResourceFromItem(@PathVariable Long itemId, @PathVariable Long resourceId){
         Item item = itemService.removeResourceFromItem(itemId, resourceId);
 
         return new ResponseEntity<>(ItemDto.from(item), OK);

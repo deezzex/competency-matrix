@@ -1,6 +1,7 @@
 package com.nerdysoft.competencymatrix.service;
 
 import com.nerdysoft.competencymatrix.entity.Item;
+import com.nerdysoft.competencymatrix.entity.Level;
 import com.nerdysoft.competencymatrix.entity.Topic;
 import com.nerdysoft.competencymatrix.entity.TopicProgress;
 import com.nerdysoft.competencymatrix.repository.TopicProgressRepository;
@@ -35,8 +36,16 @@ public class TopicProgressService {
         return repository.findAll();
     }
 
-    public void deleteProgress(Long id){
-        repository.deleteById(id);
+    public boolean deleteProgress(Long id){
+        Optional<TopicProgress> byId = repository.findById(id);
+
+        if (byId.isPresent()){
+            TopicProgress progress = byId.get();
+            repository.delete(progress);
+        }
+        Optional<TopicProgress> removed = repository.findById(id);
+
+        return removed.isEmpty();
     }
 
     @Transactional

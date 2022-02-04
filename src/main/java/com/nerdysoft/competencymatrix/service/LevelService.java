@@ -1,5 +1,6 @@
 package com.nerdysoft.competencymatrix.service;
 
+import com.nerdysoft.competencymatrix.entity.Category;
 import com.nerdysoft.competencymatrix.entity.Level;
 import com.nerdysoft.competencymatrix.entity.Resource;
 import com.nerdysoft.competencymatrix.entity.Topic;
@@ -50,8 +51,16 @@ public class LevelService {
             return new Level();
     }
 
-    public void deleteLevel(Long id){
-        repository.deleteById(id);
+    public boolean deleteLevel(Long id){
+        Optional<Level> byId = repository.findById(id);
+
+        if (byId.isPresent()){
+            Level level = byId.get();
+            repository.delete(level);
+        }
+        Optional<Level> removed = repository.findById(id);
+
+        return removed.isEmpty();
     }
 
     @Transactional
