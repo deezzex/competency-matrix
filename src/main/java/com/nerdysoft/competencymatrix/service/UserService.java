@@ -1,28 +1,45 @@
 package com.nerdysoft.competencymatrix.service;
 
 import com.nerdysoft.competencymatrix.entity.*;
+import com.nerdysoft.competencymatrix.entity.enums.Role;
+import com.nerdysoft.competencymatrix.exception.UserAlreadyExistException;
 import com.nerdysoft.competencymatrix.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
     private final UserRepository repository;
     private final MatrixService matrixService;
     private final TopicProgressService topicProgressService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository repository, MatrixService matrixService, TopicProgressService topicProgressService) {
+    public UserService(UserRepository repository, MatrixService matrixService, TopicProgressService topicProgressService, @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.matrixService = matrixService;
         this.topicProgressService = topicProgressService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public User createUser(User user){
+    public User createUser(User user) throws UserAlreadyExistException {
+        User maybeUser = getByUsername(user.getUsername());
+
+        if (maybeUser != null){
+            throw new UserAlreadyExistException("User already exists");
+        }
+
+        Set<Role> userRoles = new HashSet<>();
+        userRoles.add(Role.USER);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(userRoles);
+
         return repository.save(user);
     }
 
@@ -63,4 +80,9 @@ public class UserService {
         }else
             return new User();
     }
+
+    public User getByUsername(String username) {
+        return repository.findByUsername(username);
+    }
+
 }

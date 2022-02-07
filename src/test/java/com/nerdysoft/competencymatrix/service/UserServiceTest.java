@@ -2,6 +2,7 @@ package com.nerdysoft.competencymatrix.service;
 
 import com.nerdysoft.competencymatrix.entity.*;
 import com.nerdysoft.competencymatrix.repository.UserRepository;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +32,7 @@ class UserServiceTest {
 
     private static final Long ID = 1L;
 
+    @SneakyThrows
     @Test
     void createUser() {
         User user = new User(ID, "testFirst", "testLast", List.of(), List.of());
