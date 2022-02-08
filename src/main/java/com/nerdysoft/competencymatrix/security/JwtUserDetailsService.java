@@ -1,10 +1,8 @@
 package com.nerdysoft.competencymatrix.security;
 
 import com.nerdysoft.competencymatrix.entity.User;
-import com.nerdysoft.competencymatrix.security.jwt.JwtUser;
 import com.nerdysoft.competencymatrix.security.jwt.JwtUserFactory;
 import com.nerdysoft.competencymatrix.service.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,7 +28,6 @@ public class JwtUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User with username: " + username + " not found");
         }
 
-        JwtUser jwtUser = JwtUserFactory.create(user);
-        return jwtUser;
+        return JwtUserFactory.create(user);
     }
 }

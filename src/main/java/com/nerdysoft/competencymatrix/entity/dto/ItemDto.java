@@ -1,11 +1,9 @@
 package com.nerdysoft.competencymatrix.entity.dto;
 
 import com.nerdysoft.competencymatrix.entity.Item;
-import com.nerdysoft.competencymatrix.entity.Resource;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

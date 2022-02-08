@@ -1,7 +1,6 @@
 package com.nerdysoft.competencymatrix.entity.dto;
 
 import com.nerdysoft.competencymatrix.entity.Category;
-import com.nerdysoft.competencymatrix.entity.Topic;
 import com.nerdysoft.competencymatrix.entity.enums.Priority;
 import com.nerdysoft.competencymatrix.entity.enums.Type;
 import lombok.Builder;

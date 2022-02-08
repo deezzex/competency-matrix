@@ -48,7 +48,6 @@ public class Item {
         return item;
     }
 
-
     public void addResource(Resource resource){
         resources.add(resource);
     }
@@ -56,7 +55,6 @@ public class Item {
     public void removeResource(Resource resource){
         resources.remove(resource);
     }
-
 
     @Override
     public boolean equals(Object o) {

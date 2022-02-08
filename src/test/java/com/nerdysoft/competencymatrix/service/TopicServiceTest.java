@@ -1,5 +1,6 @@
 package com.nerdysoft.competencymatrix.service;
 
+import com.nerdysoft.competencymatrix.entity.Category;
 import com.nerdysoft.competencymatrix.entity.Item;
 import com.nerdysoft.competencymatrix.entity.Resource;
 import com.nerdysoft.competencymatrix.entity.Topic;
@@ -37,9 +38,9 @@ class TopicServiceTest {
 
     @Test
     void createTopic() {
-        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, List.of(), List.of());
+        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, any(Category.class), List.of(), List.of());
 
-        when(repository.save(topic)).thenReturn(new Topic(ID, "testNameCreated", "testDescriptionCreated", true, Priority.LOW, List.of(), List.of()));
+        when(repository.save(topic)).thenReturn(new Topic(ID, "testNameCreated", "testDescriptionCreated", true, Priority.LOW, any(Category.class), List.of(), List.of()));
 
         Topic createdTopic = topicService.createTopic(topic);
 
@@ -50,7 +51,7 @@ class TopicServiceTest {
 
     @Test
     void findTopicById() {
-        when(repository.findById(ID)).thenReturn(Optional.of(new Topic(ID, "testName", "testDescription", true, Priority.LOW, List.of(), List.of())));
+        when(repository.findById(ID)).thenReturn(Optional.of(new Topic(ID, "testName", "testDescription", true, Priority.LOW, any(Category.class), List.of(), List.of())));
 
         Optional<Topic> maybeTopic = topicService.findTopicById(ID);
 
@@ -62,8 +63,8 @@ class TopicServiceTest {
     void findAllTopics() {
         ArrayList<Topic> list = new ArrayList<>();
 
-        Topic topic1 = new Topic(ID, "testName", "testDescription", true, Priority.LOW, List.of(), List.of());
-        Topic topic2 = new Topic(ID+1L, "testName2", "testDescription2", true, Priority.LOW, List.of(), List.of());
+        Topic topic1 = new Topic(ID, "testName", "testDescription", true, Priority.LOW, any(Category.class), List.of(), List.of());
+        Topic topic2 = new Topic(ID+1L, "testName2", "testDescription2", true, Priority.LOW, any(Category.class), List.of(), List.of());
 
         list.add(topic1);
         list.add(topic2);
@@ -78,11 +79,11 @@ class TopicServiceTest {
 
     @Test
     void updateTopic() {
-        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, List.of(), List.of());
+        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, any(Category.class), List.of(), List.of());
 
         when(repository.findById(ID)).thenReturn(Optional.of(topic));
 
-        Topic updateTopic = topicService.updateTopic(ID, new Topic(ID, "testNameUPD", "testDescription", true, Priority.LOW, List.of(), List.of()));
+        Topic updateTopic = topicService.updateTopic(ID, new Topic(ID, "testNameUPD", "testDescription", true, Priority.LOW, any(Category.class), List.of(), List.of()));
 
         assertEquals("testNameUPD", updateTopic.getName());
         verify(repository, times(1)).findById(ID);

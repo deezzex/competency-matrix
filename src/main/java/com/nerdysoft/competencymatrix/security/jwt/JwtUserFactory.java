@@ -1,15 +1,13 @@
 package com.nerdysoft.competencymatrix.security.jwt;
 
 import com.nerdysoft.competencymatrix.entity.User;
-import com.nerdysoft.competencymatrix.entity.enums.Role;
+import com.nerdysoft.competencymatrix.entity.privilege.Permission;
+import com.nerdysoft.competencymatrix.entity.privilege.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public final class JwtUserFactory {
 
@@ -24,13 +22,22 @@ public final class JwtUserFactory {
                 user.getLastName(),
                 user.getPassword(),
                 true,
-                new HashSet<>(user.getRoles()));
+                mapToGrantedAuthorities(new ArrayList<>(user.getRoles())));
     }
 
     private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> userRoles) {
-        return userRoles.stream()
-                .map(role ->
-                    new SimpleGrantedAuthority(role.name())
-                ).collect(Collectors.toList());
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<Permission> permissions = new ArrayList<>();
+
+        for (Role role : userRoles) {
+            permissions.addAll(role.getPermissions());
+        }
+
+        for (Permission permission : permissions) {
+            authorities.add(new SimpleGrantedAuthority(permission.getName()));
+        }
+
+        return authorities;
     }
 }

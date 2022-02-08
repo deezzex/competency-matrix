@@ -1,5 +1,6 @@
 package com.nerdysoft.competencymatrix.controller;
 
+import com.nerdysoft.competencymatrix.entity.Category;
 import com.nerdysoft.competencymatrix.entity.Item;
 import com.nerdysoft.competencymatrix.entity.Resource;
 import com.nerdysoft.competencymatrix.entity.Topic;
@@ -29,8 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,9 +53,9 @@ class TopicControllerTest {
     @SneakyThrows
     @Test
     void createTopic() {
-        Topic mockTopic = new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of());
+        Topic mockTopic = new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of());
 
-        when(service.createTopic(Mockito.any(Topic.class))).thenReturn(mockTopic);
+        when(service.createTopic(any(Topic.class))).thenReturn(mockTopic);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/topic").accept(MediaType.APPLICATION_JSON)
                 .content("{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"required\":false,\"priority\":\"LOW\",\"items\":[],\"resources\":[]}")
@@ -73,7 +73,7 @@ class TopicControllerTest {
     @SneakyThrows
     @Test
     void getTopics() {
-        when(service.findAllTopics()).thenReturn(List.of(new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of())));
+        when(service.findAllTopics()).thenReturn(List.of(new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of())));
 
         MockHttpServletRequestBuilder requestBuilder = get("/topic")
                 .accept(MediaType.APPLICATION_JSON);
@@ -86,7 +86,7 @@ class TopicControllerTest {
     @SneakyThrows
     @Test
     void getOneTopic() {
-        when(service.findTopicById(anyLong())).thenReturn(Optional.of(new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of())));
+        when(service.findTopicById(anyLong())).thenReturn(Optional.of(new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of())));
 
         MockHttpServletRequestBuilder requestBuilder = get("/topic/1")
                 .accept(MediaType.APPLICATION_JSON);
@@ -101,9 +101,9 @@ class TopicControllerTest {
     @SneakyThrows
     @Test
     void updateTopic() {
-        Topic mockTopic = new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of());
+        Topic mockTopic = new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of());
 
-        when(service.updateTopic(anyLong(), Mockito.any(Topic.class))).thenReturn(mockTopic);
+        when(service.updateTopic(anyLong(), any(Topic.class))).thenReturn(mockTopic);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/topic/1").accept(MediaType.APPLICATION_JSON)
                 .content("{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"required\":false,\"priority\":\"LOW\",\"items\":[],\"resources\":[]}")
@@ -138,7 +138,7 @@ class TopicControllerTest {
     @Test
     void addItemToTopic() {
         when(service.addItemToTopic(anyLong(),anyLong()))
-                .thenReturn(new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(new Item(1L, "testLabel", List.of())), List.of()));
+                .thenReturn(new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(new Item(1L, "testLabel", List.of())), List.of()));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/topic/1/add/item/2").accept(MediaType.APPLICATION_JSON);
 
@@ -152,7 +152,7 @@ class TopicControllerTest {
     @Test
     void deleteItemFromTopic() {
         when(service.removeItemFromTopic(anyLong(),anyLong()))
-                .thenReturn(new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of()));
+                .thenReturn(new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of()));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/topic/1/delete/item/2").accept(MediaType.APPLICATION_JSON);
 
@@ -166,7 +166,7 @@ class TopicControllerTest {
     @Test
     void addResourceToTopic() {
         when(service.addResourceToTopic(anyLong(),anyLong()))
-                .thenReturn(new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of(new Resource(1L, "testName", "testDesc", "testUrl"))));
+                .thenReturn(new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of(new Resource(1L, "testName", "testDesc", "testUrl"))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/topic/1/add/resource/2").accept(MediaType.APPLICATION_JSON);
 
@@ -180,7 +180,7 @@ class TopicControllerTest {
     @Test
     void deleteResourceFromTopic() {
         when(service.removeResourceFromTopic(anyLong(),anyLong()))
-                .thenReturn(new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of()));
+                .thenReturn(new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of()));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/topic/1/delete/resource/2").accept(MediaType.APPLICATION_JSON);
 

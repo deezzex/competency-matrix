@@ -1,5 +1,6 @@
 package com.nerdysoft.competencymatrix.controller;
 
+import com.nerdysoft.competencymatrix.entity.Category;
 import com.nerdysoft.competencymatrix.entity.Level;
 import com.nerdysoft.competencymatrix.entity.Topic;
 import com.nerdysoft.competencymatrix.entity.TopicProgress;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -51,7 +53,7 @@ class TopicProgressControllerTest {
     @SneakyThrows
     @Test
     void createProgress() {
-        TopicProgress mockProgress = new TopicProgress(1L, "testComment", 10, false, new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of()));
+        TopicProgress mockProgress = new TopicProgress(1L, "testComment", 10, false, new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of()));
 
         when(service.createProgress(Mockito.any(TopicProgress.class))).thenReturn(mockProgress);
 
@@ -72,7 +74,7 @@ class TopicProgressControllerTest {
     @Test
     void addTopicToProgress() {
         when(service.addTopicToProgress(anyLong(),anyLong()))
-                .thenReturn(new TopicProgress(1L, "testComment", 10, false, new Topic(1L, "testName", "testDescNEW", false, Priority.LOW, List.of(), List.of())));
+                .thenReturn(new TopicProgress(1L, "testComment", 10, false, new Topic(1L, "testName", "testDescNEW", false, Priority.LOW, any(Category.class), List.of(), List.of())));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/progress/1/add/2").accept(MediaType.APPLICATION_JSON);
 
@@ -101,8 +103,8 @@ class TopicProgressControllerTest {
     @SneakyThrows
     @Test
     void evaluateProgress() {
-        when(service.setCommentAndMarkToProgress(anyLong(), any(TopicProgress.class)))
-                .thenReturn(new TopicProgress(1L, "testCommentNEW", 5, false, new Topic(1L, "testName", "testDescNEW", false, Priority.LOW, List.of(), List.of())));
+        when(service.setCommentAndMarkToProgress(anyLong(), any(TopicProgress.class), any(UserDetails.class)))
+                .thenReturn(new TopicProgress(1L, "testCommentNEW", 5, false, new Topic(1L, "testName", "testDescNEW", false, Priority.LOW, any(Category.class), List.of(), List.of())));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/progress/evaluate/1").accept(MediaType.APPLICATION_JSON)
                 .content("{\"comment\":\"testCommentNEW\",\"mark\":5}")
@@ -118,7 +120,7 @@ class TopicProgressControllerTest {
     @Test
     void finishProgress() {
         when(service.finishProgress(anyLong()))
-                .thenReturn(new TopicProgress(1L, "testCommentNEW", 5, true, new Topic(1L, "testName", "testDescNEW", false, Priority.LOW, List.of(), List.of())));
+                .thenReturn(new TopicProgress(1L, "testCommentNEW", 5, true, new Topic(1L, "testName", "testDescNEW", false, Priority.LOW, any(Category.class), List.of(), List.of())));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/progress/finish/1").accept(MediaType.APPLICATION_JSON);
 

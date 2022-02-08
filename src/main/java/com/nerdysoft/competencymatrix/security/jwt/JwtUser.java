@@ -6,33 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Date;
 
-public class JwtUser implements UserDetails {
-
-    @Getter
-    @JsonIgnore
-    private final Long id;
-    private final String username;
-    @Getter
-    @JsonIgnore
-    private final String firstName;
-    @Getter
-    @JsonIgnore
-    private final String lastName;
-    private final String password;
-    private final boolean enabled;
-    private final Collection<? extends GrantedAuthority> authorities;
-
-    public JwtUser(Long id, String username, String firstName, String lastName, String password, boolean enabled, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.enabled = enabled;
-        this.authorities = authorities;
-    }
+public record JwtUser(@Getter @JsonIgnore Long id, String username,
+                      @Getter @JsonIgnore String firstName, @Getter @JsonIgnore String lastName,
+                      String password, boolean enabled,
+                      Collection<? extends GrantedAuthority> authorities) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -49,16 +27,19 @@ public class JwtUser implements UserDetails {
     public String getUsername() {
         return username;
     }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {

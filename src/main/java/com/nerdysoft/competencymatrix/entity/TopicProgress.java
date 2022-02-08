@@ -43,17 +43,6 @@ public class TopicProgress {
         return topicProgress;
     }
 
-    public static TopicProgress fromOnCreate(TopicProgressDto progressDto) {
-        TopicProgress topicProgress = new TopicProgress();
-
-        topicProgress.setComment(progressDto.getComment());
-        topicProgress.setMark(progressDto.getMark());
-        topicProgress.setFinished(progressDto.isFinished());
-        topicProgress.setTopic(new Topic());
-
-        return topicProgress;
-    }
-
     public TopicProgress(Long id, String comment, Integer mark, boolean finished) {
         this.id = id;
         this.comment = comment;

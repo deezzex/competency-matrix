@@ -1,7 +1,5 @@
 package com.nerdysoft.competencymatrix.entity.dto;
 
-import com.nerdysoft.competencymatrix.entity.Competency;
-import com.nerdysoft.competencymatrix.entity.Level;
 import com.nerdysoft.competencymatrix.entity.Matrix;
 import lombok.Builder;
 import lombok.Data;

@@ -9,6 +9,7 @@ import com.nerdysoft.competencymatrix.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/category")
+@PreAuthorize("hasAuthority('CAN_ALL')")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -42,6 +44,9 @@ public class CategoryController {
         List<CategoryDto> categoryDtoList = allCategories.stream()
                 .map(CategoryDto::from).collect(Collectors.toList());
 
+        if (categoryDtoList.isEmpty()){
+            return new ResponseEntity<>(NO_CONTENT);
+        }
         return new ResponseEntity<>(categoryDtoList, OK);
     }
 
@@ -81,13 +86,19 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> addTopicToCategory(@PathVariable Long categoryId, @PathVariable Long topicId){
         Category category = categoryService.addTopicToCategory(categoryId, topicId);
 
-        return new ResponseEntity<>(CategoryDto.from(category), OK);
+        if(Objects.nonNull(category.getId())){
+            return new ResponseEntity<>(CategoryDto.from(category), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{categoryId}/delete/{topicId}")
     public ResponseEntity<CategoryDto> deleteTopicFromCategory(@PathVariable Long categoryId, @PathVariable Long topicId){
         Category category = categoryService.removeTopicFromCategory(categoryId, topicId);
 
-        return new ResponseEntity<>(CategoryDto.from(category), OK);
+        if(Objects.nonNull(category.getId())){
+            return new ResponseEntity<>(CategoryDto.from(category), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

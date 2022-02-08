@@ -8,6 +8,7 @@ import com.nerdysoft.competencymatrix.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/item")
+@PreAuthorize("hasAuthority('CAN_ALL')")
 public class ItemController {
 
     private final ItemService itemService;
@@ -36,10 +38,14 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemDto>> getItem(){
+    public ResponseEntity<List<ItemDto>> getItems(){
         List<Item> allItems = itemService.findAllItems();
         List<ItemDto> itemDtoList = allItems.stream()
                 .map(ItemDto::from).collect(Collectors.toList());
+
+        if (itemDtoList.isEmpty()){
+            return new ResponseEntity<>(NO_CONTENT);
+        }
 
         return new ResponseEntity<>(itemDtoList, OK);
     }
@@ -80,13 +86,19 @@ public class ItemController {
     public ResponseEntity<ItemDto> addResourceToItem(@PathVariable Long itemId, @PathVariable Long resourceId){
         Item item = itemService.addResourceToItem(itemId, resourceId);
 
-        return new ResponseEntity<>(ItemDto.from(item), OK);
+        if(Objects.nonNull(item.getId())){
+            return new ResponseEntity<>(ItemDto.from(item), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{itemId}/delete/{resourceId}")
     public ResponseEntity<ItemDto> removeResourceFromItem(@PathVariable Long itemId, @PathVariable Long resourceId){
         Item item = itemService.removeResourceFromItem(itemId, resourceId);
 
-        return new ResponseEntity<>(ItemDto.from(item), OK);
+        if(Objects.nonNull(item.getId())){
+            return new ResponseEntity<>(ItemDto.from(item), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

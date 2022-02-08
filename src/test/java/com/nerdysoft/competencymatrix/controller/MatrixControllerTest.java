@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -28,8 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -164,7 +164,7 @@ class MatrixControllerTest {
     @SneakyThrows
     @Test
     void addCompetencyToMatrix() {
-        when(service.addCompetencyToMatrix(anyLong(),anyLong()))
+        when(service.addCompetencyToMatrix(anyLong(),anyLong(), any(UserDetails.class)))
                 .thenReturn(new Matrix(1L, "testName", "testDesc", List.of(new Competency(1L, "testName", "testDesc", List.of())), List.of()));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/matrix/1/add/competency/2").accept(MediaType.APPLICATION_JSON);

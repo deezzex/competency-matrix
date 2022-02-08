@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
+import javax.validation.Valid;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/registration")
@@ -26,12 +27,12 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> registration(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> registration(@Valid @RequestBody UserDto userDto){
         try {
             User user = userService.createUser(User.from(userDto));
             return new ResponseEntity<>(UserDto.from(user), OK);
         }catch (UserAlreadyExistException e){
-            return new ResponseEntity<>(BAD_REQUEST);
+            return new ResponseEntity<>(CONFLICT);
         }
 
     }

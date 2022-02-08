@@ -2,10 +2,12 @@ package com.nerdysoft.competencymatrix.service;
 
 import com.nerdysoft.competencymatrix.entity.Category;
 import com.nerdysoft.competencymatrix.entity.Competency;
-import com.nerdysoft.competencymatrix.entity.Level;
-import com.nerdysoft.competencymatrix.entity.Matrix;
+import com.nerdysoft.competencymatrix.entity.access.ManagerCompetencyAccess;
 import com.nerdysoft.competencymatrix.repository.CompetencyRepository;
+import com.nerdysoft.competencymatrix.repository.access.ManagerCompetencyRepository;
+import com.nerdysoft.competencymatrix.service.utility.AccessUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,11 +19,13 @@ public class CompetencyService {
 
     private final CompetencyRepository repository;
     private final CategoryService categoryService;
+    private final ManagerCompetencyRepository accessRepository;
 
     @Autowired
-    public CompetencyService(CompetencyRepository repository, CategoryService categoryService) {
+    public CompetencyService(CompetencyRepository repository, CategoryService categoryService, ManagerCompetencyRepository accessRepository) {
         this.repository = repository;
         this.categoryService = categoryService;
+        this.accessRepository = accessRepository;
     }
 
     public Competency createCompetency(Competency competency){
@@ -37,8 +41,12 @@ public class CompetencyService {
     }
 
     @Transactional
-    public Competency updateCompetency(Long id, Competency competencyData){
+    public Competency updateCompetency(Long id, Competency competencyData, UserDetails user){
         Optional<Competency> maybeCompetency = repository.findById(id);
+
+        if (!AccessUtils.getAccessForManager(user, id)){
+            return new Competency();
+        }
 
         if (maybeCompetency.isPresent()){
             Competency competency = maybeCompetency.get();
@@ -64,9 +72,14 @@ public class CompetencyService {
     }
 
     @Transactional
-    public Competency addCategoryToCompetency(Long competencyId, Long categoryId){
+    public Competency addCategoryToCompetency(Long competencyId, Long categoryId, UserDetails user){
         Optional<Competency> maybeCompetency = findCompetencyById(competencyId);
         Optional<Category> maybeCategory = categoryService.findCategoryById(categoryId);
+
+        if (!AccessUtils.getAccessForManager(user, competencyId)){
+            return new Competency();
+        }
+
         if (maybeCompetency.isPresent() && maybeCategory.isPresent()){
             Competency competency = maybeCompetency.get();
             Category category = maybeCategory.get();
@@ -79,9 +92,14 @@ public class CompetencyService {
     }
 
     @Transactional
-    public Competency removeCategoryFromCompetency(Long competencyId, Long categoryId){
+    public Competency removeCategoryFromCompetency(Long competencyId, Long categoryId, UserDetails user){
         Optional<Competency> maybeCompetency = findCompetencyById(competencyId);
         Optional<Category> maybeCategory = categoryService.findCategoryById(categoryId);
+
+        if (!AccessUtils.getAccessForManager(user, competencyId)){
+            return new Competency();
+        }
+
         if (maybeCompetency.isPresent() && maybeCategory.isPresent()){
             Competency competency = maybeCompetency.get();
             Category category = maybeCategory.get();

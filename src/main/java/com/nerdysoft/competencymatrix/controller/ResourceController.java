@@ -19,6 +19,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController()
 @RequestMapping("/resource")
+@PreAuthorize("hasAuthority('CAN_ALL')")
 public class ResourceController {
 
     private final ResourceService resourceService;
@@ -34,12 +35,15 @@ public class ResourceController {
         return new ResponseEntity<>(ResourceDto.from(resource), OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<ResourceDto>> getResource(){
+    public ResponseEntity<List<ResourceDto>> getResources(){
         List<Resource> allResources = resourceService.findAllResources();
         List<ResourceDto> resourceDtoList = allResources.stream()
                 .map(ResourceDto::from).collect(Collectors.toList());
+
+        if (resourceDtoList.isEmpty()){
+            return new ResponseEntity<>(NO_CONTENT);
+        }
 
         return new ResponseEntity<>(resourceDtoList, OK);
     }

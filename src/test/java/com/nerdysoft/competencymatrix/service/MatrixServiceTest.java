@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +143,7 @@ class MatrixServiceTest {
         when(competencyService.findCompetencyById(2L)).thenReturn(Optional.of(new Competency()));
 
         matrix.addCompetency(competency);
-        service.addCompetencyToMatrix(1L, 2L);
+        service.addCompetencyToMatrix(1L, 2L, any(UserDetails.class));
 
         assertTrue(matrix.getCompetencies().contains(competency));
         verify(repository, times(1)).findById(ID);

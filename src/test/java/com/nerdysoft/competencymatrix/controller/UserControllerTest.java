@@ -1,9 +1,6 @@
 package com.nerdysoft.competencymatrix.controller;
 
-import com.nerdysoft.competencymatrix.entity.Matrix;
-import com.nerdysoft.competencymatrix.entity.Topic;
-import com.nerdysoft.competencymatrix.entity.TopicProgress;
-import com.nerdysoft.competencymatrix.entity.User;
+import com.nerdysoft.competencymatrix.entity.*;
 import com.nerdysoft.competencymatrix.entity.enums.Priority;
 import com.nerdysoft.competencymatrix.service.UserService;
 import lombok.SneakyThrows;
@@ -30,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -98,7 +96,7 @@ class UserControllerTest {
     @Test
     void addProgressToUser() {
         when(service.addProgressToUser(anyLong(),anyLong()))
-                .thenReturn(new User(1L, "first", "last", List.of(), List.of(new TopicProgress(1L, "testComment", 10, false, new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of())))));
+                .thenReturn(new User(1L, "first", "last", List.of(), List.of(new TopicProgress(1L, "testComment", 10, false, new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of())))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/user/1/add/progress/2").accept(MediaType.APPLICATION_JSON);
 

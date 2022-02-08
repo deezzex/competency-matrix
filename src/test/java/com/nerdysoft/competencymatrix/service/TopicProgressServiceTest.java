@@ -1,5 +1,6 @@
 package com.nerdysoft.competencymatrix.service;
 
+import com.nerdysoft.competencymatrix.entity.Category;
 import com.nerdysoft.competencymatrix.entity.Level;
 import com.nerdysoft.competencymatrix.entity.Topic;
 import com.nerdysoft.competencymatrix.entity.TopicProgress;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +88,7 @@ class TopicProgressServiceTest {
     void addTopicToProgress() {
         TopicProgress progress = new TopicProgress();
 
-        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, List.of(), List.of());
+        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, any(Category.class), List.of(), List.of());
 
         when(repository.findById(ID)).thenReturn(Optional.of(progress));
         when(topicService.findTopicById(2L)).thenReturn(Optional.of(topic));
@@ -103,7 +105,7 @@ class TopicProgressServiceTest {
         TopicProgress progress = new TopicProgress(ID, "testComment", 10, false, new Topic());
         when(repository.findById(ID)).thenReturn(Optional.of(progress));
 
-        TopicProgress topicProgress = service.setCommentAndMarkToProgress(ID, progress);
+        TopicProgress topicProgress = service.setCommentAndMarkToProgress(ID, progress, any(UserDetails.class));
 
         assertEquals("testComment", topicProgress.getComment());
         assertEquals(10, topicProgress.getMark());

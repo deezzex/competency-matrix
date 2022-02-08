@@ -1,11 +1,16 @@
 package com.nerdysoft.competencymatrix.service;
 
-import com.nerdysoft.competencymatrix.entity.Item;
-import com.nerdysoft.competencymatrix.entity.Level;
+import com.nerdysoft.competencymatrix.entity.Competency;
 import com.nerdysoft.competencymatrix.entity.Topic;
 import com.nerdysoft.competencymatrix.entity.TopicProgress;
+import com.nerdysoft.competencymatrix.entity.access.EvaluatorProgressAccess;
+import com.nerdysoft.competencymatrix.entity.access.ManagerCompetencyAccess;
 import com.nerdysoft.competencymatrix.repository.TopicProgressRepository;
+import com.nerdysoft.competencymatrix.repository.access.EvaluatorProgressRepository;
+import com.nerdysoft.competencymatrix.service.utility.AccessUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,11 +22,13 @@ public class TopicProgressService {
 
     private final TopicProgressRepository repository;
     private final TopicService topicService;
+    private final EvaluatorProgressRepository accessRepository;
 
     @Autowired
-    public TopicProgressService(TopicProgressRepository repository, TopicService topicService) {
+    public TopicProgressService(TopicProgressRepository repository, TopicService topicService, EvaluatorProgressRepository accessRepository) {
         this.repository = repository;
         this.topicService = topicService;
+        this.accessRepository = accessRepository;
     }
 
     public TopicProgress createProgress(TopicProgress progress){
@@ -64,8 +71,13 @@ public class TopicProgressService {
     }
 
     @Transactional
-    public TopicProgress setCommentAndMarkToProgress(Long progressId, TopicProgress progress){
+    public TopicProgress setCommentAndMarkToProgress(Long progressId, TopicProgress progress, UserDetails user){
         Optional<TopicProgress> maybeProgress = findProgressById(progressId);
+
+        if (!AccessUtils.getAccessForEvaluator(user, progressId)){
+            return new TopicProgress();
+        }
+
         if (maybeProgress.isPresent()){
             TopicProgress topicProgress = maybeProgress.get();
 
@@ -100,4 +112,5 @@ public class TopicProgressService {
 
         return requiredTopics==finishedAndRequiredTopic && percentage >= 0.8;
     }
+
 }

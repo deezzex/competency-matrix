@@ -1,6 +1,6 @@
 package com.nerdysoft.competencymatrix.security.jwt;
 
-import com.nerdysoft.competencymatrix.entity.enums.Role;
+import com.nerdysoft.competencymatrix.entity.privilege.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.SecondaryTable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -31,7 +30,7 @@ public class JwtTokenProvider {
     @Value("${jwt.token.expired}")
     private long validityInMilliseconds;
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
     public JwtTokenProvider(UserDetailsService userDetailsService) {
@@ -85,11 +84,8 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
 
-            if (claims.getBody().getExpiration().before(new Date())) {
-                return false;
-            }
+            return !claims.getBody().getExpiration().before(new Date());
 
-            return true;
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException("JWT token is expired or invalid");
         }
@@ -99,7 +95,7 @@ public class JwtTokenProvider {
         Set<String> result = new HashSet<>();
 
         userRoles.forEach(role -> {
-            result.add(role.name());
+            result.add(role.getName());
         });
 
         return result;

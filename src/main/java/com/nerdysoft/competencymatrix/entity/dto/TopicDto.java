@@ -1,19 +1,12 @@
 package com.nerdysoft.competencymatrix.entity.dto;
 
-import com.nerdysoft.competencymatrix.entity.Item;
-import com.nerdysoft.competencymatrix.entity.Resource;
 import com.nerdysoft.competencymatrix.entity.Topic;
 import com.nerdysoft.competencymatrix.entity.enums.Priority;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

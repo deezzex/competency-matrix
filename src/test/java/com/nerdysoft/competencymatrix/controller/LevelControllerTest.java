@@ -30,8 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -141,7 +140,7 @@ class LevelControllerTest {
     @Test
     void addTopicToLevel() {
         when(service.addTopicToLevel(anyLong(),anyLong()))
-                .thenReturn(new Level(1L, "testName", "testDesc", List.of(new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of()))));
+                .thenReturn(new Level(1L, "testName", "testDesc", List.of(new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of()))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/level/1/add/2").accept(MediaType.APPLICATION_JSON);
 

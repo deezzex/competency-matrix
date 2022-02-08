@@ -2,6 +2,7 @@ package com.nerdysoft.competencymatrix.controller;
 
 import com.nerdysoft.competencymatrix.entity.Category;
 import com.nerdysoft.competencymatrix.entity.Competency;
+import com.nerdysoft.competencymatrix.entity.User;
 import com.nerdysoft.competencymatrix.entity.enums.Priority;
 import com.nerdysoft.competencymatrix.entity.enums.Type;
 import com.nerdysoft.competencymatrix.service.CompetencyService;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -29,8 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -105,7 +106,7 @@ class CompetencyControllerTest {
     void updateCompetency() {
         Competency mockCompetency = new Competency(1L, "testName", "testDesc", List.of());
 
-        when(service.updateCompetency(anyLong(), Mockito.any(Competency.class))).thenReturn(mockCompetency);
+        when(service.updateCompetency(anyLong(), Mockito.any(Competency.class), any(UserDetails.class))).thenReturn(mockCompetency);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/competency/1").accept(MediaType.APPLICATION_JSON)
                 .content("{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"categories\":[]}")
@@ -139,7 +140,7 @@ class CompetencyControllerTest {
     @SneakyThrows
     @Test
     void addCategoryToCompetency() {
-        when(service.addCategoryToCompetency(anyLong(),anyLong()))
+        when(service.addCategoryToCompetency(anyLong(),anyLong(),any(UserDetails.class)))
                 .thenReturn(new Competency(1L, "testName", "testDesc", List.of(new Category(1L, "testName", "testDesc", Type.HARD_SKILL, Priority.LOW, List.of()))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/competency/1/add/2").accept(MediaType.APPLICATION_JSON);
@@ -153,7 +154,7 @@ class CompetencyControllerTest {
     @SneakyThrows
     @Test
     void deleteCategoryFromCompetency() {
-        when(service.removeCategoryFromCompetency(anyLong(),anyLong()))
+        when(service.removeCategoryFromCompetency(anyLong(),anyLong(), any(UserDetails.class)))
                 .thenReturn(new Competency(1L, "testName", "testDesc", List.of()));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/competency/1/delete/2").accept(MediaType.APPLICATION_JSON);

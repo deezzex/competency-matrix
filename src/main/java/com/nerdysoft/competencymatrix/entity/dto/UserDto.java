@@ -1,9 +1,7 @@
 package com.nerdysoft.competencymatrix.entity.dto;
 
-import com.nerdysoft.competencymatrix.entity.Matrix;
-import com.nerdysoft.competencymatrix.entity.TopicProgress;
 import com.nerdysoft.competencymatrix.entity.User;
-import com.nerdysoft.competencymatrix.entity.enums.Role;
+import com.nerdysoft.competencymatrix.entity.privilege.Role;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,11 +1,12 @@
 package com.nerdysoft.competencymatrix.service;
 
 import com.nerdysoft.competencymatrix.entity.*;
-import com.nerdysoft.competencymatrix.entity.enums.Role;
+import com.nerdysoft.competencymatrix.entity.privilege.Role;
 import com.nerdysoft.competencymatrix.exception.UserAlreadyExistException;
 import com.nerdysoft.competencymatrix.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +35,7 @@ public class UserService {
             throw new UserAlreadyExistException("User already exists");
         }
 
-        Set<Role> userRoles = new HashSet<>();
-        userRoles.add(Role.USER);
-
+        Set<Role> userRoles = Set.of(new Role(1L));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(userRoles);
 
@@ -85,4 +84,7 @@ public class UserService {
         return repository.findByUsername(username);
     }
 
+    public List<Matrix> findUserMatrices(UserDetails user) {
+        return repository.findUserMatrix(user.getUsername());
+    }
 }

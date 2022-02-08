@@ -1,11 +1,13 @@
 package com.nerdysoft.competencymatrix.entity;
 
 import com.nerdysoft.competencymatrix.entity.dto.UserDto;
-import com.nerdysoft.competencymatrix.entity.enums.Role;
+import com.nerdysoft.competencymatrix.entity.privilege.Role;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,18 +26,28 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "first name must be filled")
+    @Size(min = 3, max = 25, message = "Size of first name must be between 3 and 25")
     private String firstName;
 
+    @NotEmpty(message = "last name must be filled")
+    @Size(min = 3, max = 25, message = "Size of last name must be between 3 and 25")
     private String lastName;
 
+    @NotEmpty(message = "username must be filled")
+    @Size(min = 3, max = 25, message = "Size of username must be between 3 and 25")
     private String username;
 
+    @NotEmpty(message = "password must be filled")
     private String password;
 
-    @ElementCollection(targetClass = Role.class,fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"))
-    @ToString.Exclude
-    @Enumerated(EnumType.STRING)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
     @OneToMany
@@ -48,6 +60,14 @@ public class User {
     @ToString.Exclude
     private List<TopicProgress> topicProgressList = new ArrayList<>();
 
+    public User(Long id, String firstName, String lastName, List<Matrix> matrices, List<TopicProgress> topicProgressList) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.matrices = matrices;
+        this.topicProgressList = topicProgressList;
+    }
+
     public static User from(UserDto userDto) {
         User user = new User();
 
@@ -57,14 +77,6 @@ public class User {
         user.setUsername(userDto.getUsername());
 
         return user;
-    }
-
-    public User(Long id, String firstName, String lastName, List<Matrix> matrices, List<TopicProgress> topicProgressList) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.matrices = matrices;
-        this.topicProgressList = topicProgressList;
     }
 
     public void addMatrix(Matrix matrix){matrices.add(matrix);}

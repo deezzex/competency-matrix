@@ -1,6 +1,5 @@
 package com.nerdysoft.competencymatrix.config;
 
-import com.nerdysoft.competencymatrix.entity.enums.Role;
 import com.nerdysoft.competencymatrix.security.jwt.JwtConfigurer;
 import com.nerdysoft.competencymatrix.security.jwt.JwtTokenProvider;
 
@@ -44,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(LOGIN_ENDPOINT, REGISTER_ENDPOINT).permitAll()
-                .antMatchers(ADMIN_ENDPOINT).hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

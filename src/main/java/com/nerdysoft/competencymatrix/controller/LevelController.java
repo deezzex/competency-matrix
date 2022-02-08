@@ -9,6 +9,7 @@ import com.nerdysoft.competencymatrix.service.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/level")
+@PreAuthorize("hasAuthority('CAN_ALL')")
 public class LevelController {
 
     private final LevelService levelService;
@@ -41,6 +43,10 @@ public class LevelController {
         List<Level> allLevels = levelService.findAllLevels();
         List<LevelDto> levelDtoList = allLevels.stream()
                 .map(LevelDto::from).collect(Collectors.toList());
+
+        if (levelDtoList.isEmpty()){
+            return new ResponseEntity<>(NO_CONTENT);
+        }
 
         return new ResponseEntity<>(levelDtoList, OK);
     }
@@ -81,13 +87,19 @@ public class LevelController {
     public ResponseEntity<LevelDto> addTopicToLevel(@PathVariable Long levelId, @PathVariable Long topicId){
         Level level = levelService.addTopicToLevel(levelId, topicId);
 
-        return new ResponseEntity<>(LevelDto.from(level), OK);
+        if(Objects.nonNull(level.getId())){
+            return new ResponseEntity<>(LevelDto.from(level), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{levelId}/delete/{topicId}")
     public ResponseEntity<LevelDto> deleteTopicFromLevel(@PathVariable Long levelId, @PathVariable Long topicId){
         Level level = levelService.removeTopicFromLevel(levelId, topicId);
 
-        return new ResponseEntity<>(LevelDto.from(level), OK);
+        if(Objects.nonNull(level.getId())){
+            return new ResponseEntity<>(LevelDto.from(level), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

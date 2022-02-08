@@ -29,8 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -139,7 +138,7 @@ class CategoryControllerTest {
     @Test
     void addTopicToCategory() {
         when(service.addTopicToCategory(anyLong(),anyLong()))
-                .thenReturn(new Category(1L, "testName", "testDesc", Type.HARD_SKILL, Priority.LOW, List.of(new Topic(1L, "testName", "testDesc", false, Priority.LOW, List.of(), List.of()))));
+                .thenReturn(new Category(1L, "testName", "testDesc", Type.HARD_SKILL, Priority.LOW, List.of(new Topic(1L, "testName", "testDesc", false, Priority.LOW, any(Category.class), List.of(), List.of()))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/category/1/add/2").accept(MediaType.APPLICATION_JSON);
 

@@ -101,7 +101,7 @@ class LevelServiceTest {
     void addTopicToLevel() {
         Level level = new Level();
 
-        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, List.of(), List.of());
+        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, any(Category.class), List.of(), List.of());
 
         when(repository.findById(ID)).thenReturn(Optional.of(level));
         when(topicService.findTopicById(2L)).thenReturn(Optional.of(new Topic()));
@@ -117,7 +117,7 @@ class LevelServiceTest {
     void removeTopicFromLevel() {
         Level level = new Level();
 
-        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, List.of(), List.of());
+        Topic topic = new Topic(ID, "testName", "testDescription", true, Priority.LOW, any(Category.class), List.of(), List.of());
 
         when(repository.findById(ID)).thenReturn(Optional.of(level));
         when(topicService.findTopicById(2L)).thenReturn(Optional.of(new Topic()));

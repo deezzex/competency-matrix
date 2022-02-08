@@ -2,8 +2,11 @@ package com.nerdysoft.competencymatrix.service;
 
 import com.nerdysoft.competencymatrix.entity.*;
 import com.nerdysoft.competencymatrix.repository.MatrixRepository;
+import com.nerdysoft.competencymatrix.service.utility.AccessUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.UserDataHandler;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -93,9 +96,13 @@ public class MatrixService {
     }
 
     @Transactional
-    public Matrix addCompetencyToMatrix(Long matrixId, Long competencyId){
+    public Matrix addCompetencyToMatrix(Long matrixId, Long competencyId, UserDetails user){
         Optional<Matrix> maybeMatrix = findMatrixById(matrixId);
         Optional<Competency> maybeCompetency = competencyService.findCompetencyById(competencyId);
+
+        if (!AccessUtils.getAccessForManager(user, competencyId)){
+            return new Matrix();
+        }
 
         if (maybeMatrix.isPresent() && maybeCompetency.isPresent()){
             Matrix matrix = maybeMatrix.get();
@@ -123,4 +130,5 @@ public class MatrixService {
         }else
             return new Matrix();
     }
+
 }

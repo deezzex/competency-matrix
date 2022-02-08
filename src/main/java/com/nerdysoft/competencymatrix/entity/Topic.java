@@ -31,7 +31,6 @@ public class Topic {
     @Size(min = 5, max = 50, message = "Size of Description must be between 5 and 50")
     private String description;
 
-
     @NotNull(message = "required must be filled")
     private boolean required;
 
@@ -61,16 +60,6 @@ public class Topic {
         topic.setPriority(topicDto.getPriority());
 
         return topic;
-    }
-
-    public Topic(Long id, String name, String description, boolean required, Priority priority, List<Item> items, List<Resource> resources) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.required = required;
-        this.priority = priority;
-        this.items = items;
-        this.resources = resources;
     }
 
     public void addResource(Resource resource){
